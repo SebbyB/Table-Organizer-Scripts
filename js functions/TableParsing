@@ -1,0 +1,165 @@
+var doLogAll = false;
+var printTotal = true;
+
+
+
+var color = 'lime';
+
+
+
+const StatusColors = {
+    CHECKED: 'lime',
+    PENDING: 'yellow',
+    EXCEPTION: 'red',
+    MISC: 'lightblue'
+};
+
+//Cleanup functions
+
+//Removes Hyphen (-)
+function removeDashes(numberSet) {
+    return numberSet.replace(/-/g, '');
+}
+
+//Removes Comma (,)
+function removeCommas(numberSet) {
+    return numberSet.replace(/,/g, '');
+}
+
+//Removes Space ( )
+function removeSpaces(numberSet) {
+    return numberSet.replace(/\s+/g, '');
+}
+
+// Removes Parentheses ()
+function removeParentheses(numberSet) {
+    return numberSet.replace(/[()]/g, '');
+}
+
+// Removes Brackets []
+function removeBrackets(numberSet) {
+    return numberSet.replace(/[\[\]]/g, '');
+}
+
+
+//Counting functions
+function printRowsCount() {
+    // Iterate through each row in the table
+    var count = 1;
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        // Print the row number (index + 1 for 1-based index)
+        if(doLogAll){
+            console.log('Row number:', count);
+        }
+        count++;
+    }
+    if(printTotal){
+        console.log("Total Rows: ", count);
+    }
+}
+
+function countAll() {
+    // Iterate through each row in the table
+    var cellCount = 1;
+    var rowCount = 1;
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        // Print the row number (index + 1 for 1-based index)
+        if(doLogAll){
+            console.log('Row number:', rowCount);
+        }
+
+        // Iterate through each cell in the current row
+        for (var j = 0, cell; cell = row.cells[j]; j++) {
+            // Print the column number (index + 1 for 1-based index)
+            if (doLogAll) {
+                console.log('    Column number:', j + 1);
+            }
+            cellCount++;
+        }
+        rowCount++;
+    }
+    if(printTotal){
+        console.log("Total Rows: ",rowCount);
+        console.log("Total Cells: ",cellCount);
+    }
+}
+
+
+function parseAllPhrase(phrase) {
+    // Iterate through each row in the table
+    var cellCount = 1;
+    var rowCount = 1;
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        // Print the row number (index + 1 for 1-based index)
+        if(doLogAll){
+            console.log('Row number:', rowCount);
+        }
+
+        // Iterate through each cell in the current row
+        for (var j = 0, cell; cell = row.cells[j]; j++) {
+
+            var content = cell.textContent;
+            var nakedPhrase = removeDashes(removeCommas(removeSpaces(phrase)));
+            var nakedContent = removeDashes(removeCommas(removeSpaces(content)));
+
+            if(
+            content.includes(phrase) ||
+            nakedContent.includes(nakedPhrase)
+        ){
+                cell.style.backgroundColor = color;
+                    console.log('Matched content:', content);
+                
+            }
+            // Print the column number (index + 1 for 1-based index)
+            if (doLogAll) {
+                console.log('    Column number:', j + 1);
+            }
+            cellCount++;
+        }
+        rowCount++;
+    }
+    if(printTotal){
+        console.log("Total Rows: ",rowCount);
+        console.log("Total Cells: ",cellCount);
+    }
+}
+
+function parseAllDict(phrases)
+{
+    // Iterate through each row in the table
+    var cellCount = 1;
+    var rowCount = 1;
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        // Print the row number (index + 1 for 1-based index)
+        if(doLogAll){
+            console.log('Row number:', rowCount);
+        }
+
+        // Iterate through each cell in the current row
+        for (var j = 0, cell; cell = row.cells[j]; j++) {
+
+            var content = cell.textContent;
+            var nakedContent = removeDashes(removeCommas(removeSpaces(content)));
+
+            phrases.forEach(phrase => {
+            var nakedPhrase = removeDashes(removeCommas(removeSpaces(phrase)));
+            if(
+                content.includes(phrase) ||
+                nakedContent.includes(nakedPhrase)
+            ){
+                cell.style.backgroundColor = color;
+                    console.log('Matched content:', content);
+                    console.log("Row:",rowCount);
+                    console.log("Column:",j + 1);
+
+            }
+        });
+            // Print the column number (index + 1 for 1-based index)
+            if (doLogAll) {
+                console.log('    Column number:', j + 1);
+            }
+            cellCount++;
+        }
+        rowCount++;
+    }
+}
